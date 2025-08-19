@@ -27,6 +27,8 @@ public class VetPawtnerApplication implements CommandLineRunner {
 	PetRepository petRepository;
 	@Autowired
 	ProductRepository productRepository;
+	@Autowired
+	ForumRepository forumRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -45,6 +47,14 @@ public class VetPawtnerApplication implements CommandLineRunner {
 
 		// 5. ✅ Create Pet
 		Pet pet = createPetIfNotExists(user);
+
+		//6. create post -- commit
+		Forum post = createForumPost(user);
+
+		Forum comment = createForumComment(user, post);
+
+
+
 
 		System.out.println("✅ All demo data created successfully!");
 	}
@@ -139,4 +149,28 @@ public class VetPawtnerApplication implements CommandLineRunner {
 		System.out.println("✅ Pet created with ID: " + savedPet.getPetId());
 		return savedPet;
 	}
+	private Forum createForumPost(User user) {
+		Forum post = new Forum();
+		post.setUser(user);
+		post.setTitle("Welcome to VetPawtner Forum!");
+		post.setContent("This is the first forum post for pet lovers.");
+		post.setParent(null); // Top-level post
+
+		Forum savedPost = forumRepository.save(post);
+		System.out.println("✅ Forum post created with ID: " + savedPost.getForumId());
+		return savedPost;
+	}
+
+	 private Forum createForumComment(User user, Forum parentPost) {
+		Forum comment = new Forum();
+		comment.setUser(user);
+		comment.setContent("This is a comment on the first post.");
+		comment.setParent(parentPost); // Reply
+		// Title is null for comments (`setTitle(null)` is optional)
+		Forum savedComment = forumRepository.save(comment);
+		System.out.println("✅ Forum comment created with ID: " + savedComment.getForumId());
+		return savedComment;
+	}
+
+
 }
