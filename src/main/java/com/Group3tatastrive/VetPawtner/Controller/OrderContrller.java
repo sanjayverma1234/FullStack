@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @RestController
-@RequestMapping("demo/orders")
+@RequestMapping("/orders")
 public class OrderContrller {
     @Autowired
     private OrderService orderService;
-    @GetMapping("Fetching")
+    @GetMapping("/fecth")
     public ResponseEntity<List<Order>> getalldetails(){
         return ResponseEntity.ok(orderService.getalldetails());
 
